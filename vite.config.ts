@@ -7,9 +7,6 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
-  // Disable Cloudflare adapter so TanStack Start uses its standard Node.js output,
-  // which supports static pre-rendering for Vercel deployment.
-  cloudflare: false,
   tanstackStart: {
     prerender: {
       enabled: true,
