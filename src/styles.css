@@ -349,3 +349,8 @@
     font-size: 0.95rem;
   }
 }
+
+/* Logo tinted to the site's green palette */
+.logo-tint {
+  filter: saturate(0.2) sepia(0.35) hue-rotate(70deg) saturate(2.6) brightness(1.02);
+}
