@@ -1,10 +1,12 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Search, User, LogOut } from "lucide-react";
+import { Search, User, LogOut, Sun, Moon, Monitor, Check } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/lib/auth-context";
+import { useTheme, type Theme } from "@/lib/theme-context";
+
 
 type Props = {
   search: string;
