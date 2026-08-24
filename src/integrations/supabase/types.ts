@@ -170,35 +170,116 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address_line1: string | null
+          address_line2: string | null
+          address_line3: string | null
           avatar_url: string | null
+          blood_group: string | null
+          city: string | null
           country: string
+          course_of_study: string | null
           created_at: string
+          date_of_birth: string | null
+          emergency_name: string | null
+          emergency_phone: string | null
+          emergency_relationship: string | null
           first_name: string
+          gender: string | null
+          graduation_year: string | null
+          guardian_address: string | null
+          guardian_name: string | null
+          guardian_phone: string | null
+          guardian_relationship: string | null
+          home_email: string | null
+          home_number: string | null
           id: string
+          id_full_name: string | null
+          id_phone: string | null
+          institution: string | null
+          is_graduate: boolean | null
           last_name: string
+          middle_name: string | null
           phone: string | null
+          program_of_study: string | null
+          school_level: string | null
+          signature_data: string | null
+          state: string | null
           updated_at: string
           username: string
         }
         Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          address_line3?: string | null
           avatar_url?: string | null
+          blood_group?: string | null
+          city?: string | null
           country?: string
+          course_of_study?: string | null
           created_at?: string
+          date_of_birth?: string | null
+          emergency_name?: string | null
+          emergency_phone?: string | null
+          emergency_relationship?: string | null
           first_name?: string
+          gender?: string | null
+          graduation_year?: string | null
+          guardian_address?: string | null
+          guardian_name?: string | null
+          guardian_phone?: string | null
+          guardian_relationship?: string | null
+          home_email?: string | null
+          home_number?: string | null
           id: string
+          id_full_name?: string | null
+          id_phone?: string | null
+          institution?: string | null
+          is_graduate?: boolean | null
           last_name?: string
+          middle_name?: string | null
           phone?: string | null
+          program_of_study?: string | null
+          school_level?: string | null
+          signature_data?: string | null
+          state?: string | null
           updated_at?: string
           username: string
         }
         Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          address_line3?: string | null
           avatar_url?: string | null
+          blood_group?: string | null
+          city?: string | null
           country?: string
+          course_of_study?: string | null
           created_at?: string
+          date_of_birth?: string | null
+          emergency_name?: string | null
+          emergency_phone?: string | null
+          emergency_relationship?: string | null
           first_name?: string
+          gender?: string | null
+          graduation_year?: string | null
+          guardian_address?: string | null
+          guardian_name?: string | null
+          guardian_phone?: string | null
+          guardian_relationship?: string | null
+          home_email?: string | null
+          home_number?: string | null
           id?: string
+          id_full_name?: string | null
+          id_phone?: string | null
+          institution?: string | null
+          is_graduate?: boolean | null
           last_name?: string
+          middle_name?: string | null
           phone?: string | null
+          program_of_study?: string | null
+          school_level?: string | null
+          signature_data?: string | null
+          state?: string | null
           updated_at?: string
           username?: string
         }

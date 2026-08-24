@@ -1,10 +1,12 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Search, User, LogOut } from "lucide-react";
+import { Search, User, LogOut, Sun, Moon, Monitor, Check } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/lib/auth-context";
+import { useTheme, type Theme } from "@/lib/theme-context";
+
 
 type Props = {
   search: string;
@@ -15,8 +17,16 @@ type Props = {
 
 export function TopBar({ search, onSearchChange, homeTo, profileTo }: Props) {
   const { profile, user, signOut, isAdmin } = useAuth();
+  const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const initials = ((profile?.first_name?.[0] ?? "") + (profile?.last_name?.[0] ?? "")).toUpperCase() || (user?.email?.[0]?.toUpperCase() ?? "U");
+
+  const themeOptions: { value: Theme; label: string; icon: typeof Sun }[] = [
+    { value: "light", label: "Light", icon: Sun },
+    { value: "dark", label: "Dark", icon: Moon },
+    { value: "system", label: "Device default", icon: Monitor },
+  ];
+
 
   return (
     <header className="sticky top-0 z-30 bg-background border-b border-border">
