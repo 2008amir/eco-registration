@@ -9,41 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SavedRouteImport } from './routes/saved'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as ChatRouteImport } from './routes/chat'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ResearchIdRouteImport } from './routes/research.$id'
-import { Route as AdminUsersRouteImport } from './routes/admin.users'
-import { Route as AdminResearchRouteImport } from './routes/admin.research'
-import { Route as AdminDiagnosticsRouteImport } from './routes/admin.diagnostics'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ChatRouteImport } from './routes/chat'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SavedRouteImport } from './routes/saved'
 import { Route as AdminChatRouteImport } from './routes/admin.chat'
-import { Route as AdminUsersUserIdRouteImport } from './routes/admin.users.$userId'
-import { Route as AdminResearchTemplatesRouteImport } from './routes/admin.research.templates'
-import { Route as AdminResearchNewRouteImport } from './routes/admin.research.new'
+import { Route as AdminDiagnosticsRouteImport } from './routes/admin.diagnostics'
+import { Route as AdminResearchRouteImport } from './routes/admin.research'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as ResearchIdRouteImport } from './routes/research.$id'
 import { Route as AdminActivePeriodRouteImport } from './routes/admin.active.$period'
+import { Route as AdminResearchNewRouteImport } from './routes/admin.research.new'
+import { Route as AdminResearchTemplatesRouteImport } from './routes/admin.research.templates'
+import { Route as AdminUsersUserIdRouteImport } from './routes/admin.users.$userId'
 import { Route as AdminResearchEditIdRouteImport } from './routes/admin.research.edit.$id'
 
-const SavedRoute = SavedRouteImport.update({
-  id: '/saved',
-  path: '/saved',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChatRoute = ChatRouteImport.update({
-  id: '/chat',
-  path: '/chat',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -51,24 +36,29 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ResearchIdRoute = ResearchIdRouteImport.update({
-  id: '/research/$id',
-  path: '/research/$id',
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminUsersRoute = AdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AdminRoute,
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AdminResearchRoute = AdminResearchRouteImport.update({
-  id: '/research',
-  path: '/research',
+const SavedRoute = SavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminChatRoute = AdminChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminDiagnosticsRoute = AdminDiagnosticsRouteImport.update({
@@ -76,30 +66,40 @@ const AdminDiagnosticsRoute = AdminDiagnosticsRouteImport.update({
   path: '/diagnostics',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminChatRoute = AdminChatRouteImport.update({
-  id: '/chat',
-  path: '/chat',
+const AdminResearchRoute = AdminResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminUsersUserIdRoute = AdminUsersUserIdRouteImport.update({
-  id: '/$userId',
-  path: '/$userId',
-  getParentRoute: () => AdminUsersRoute,
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
 } as any)
-const AdminResearchTemplatesRoute = AdminResearchTemplatesRouteImport.update({
-  id: '/templates',
-  path: '/templates',
-  getParentRoute: () => AdminResearchRoute,
+const ResearchIdRoute = ResearchIdRouteImport.update({
+  id: '/research/$id',
+  path: '/research/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminActivePeriodRoute = AdminActivePeriodRouteImport.update({
+  id: '/active/$period',
+  path: '/active/$period',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminResearchNewRoute = AdminResearchNewRouteImport.update({
   id: '/new',
   path: '/new',
   getParentRoute: () => AdminResearchRoute,
 } as any)
-const AdminActivePeriodRoute = AdminActivePeriodRouteImport.update({
-  id: '/active/$period',
-  path: '/active/$period',
-  getParentRoute: () => AdminRoute,
+const AdminResearchTemplatesRoute = AdminResearchTemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => AdminResearchRoute,
+} as any)
+const AdminUsersUserIdRoute = AdminUsersUserIdRouteImport.update({
+  id: '/$userId',
+  path: '/$userId',
+  getParentRoute: () => AdminUsersRoute,
 } as any)
 const AdminResearchEditIdRoute = AdminResearchEditIdRouteImport.update({
   id: '/edit/$id',
@@ -231,32 +231,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/saved': {
-      id: '/saved'
-      path: '/saved'
-      fullPath: '/saved'
-      preLoaderRoute: typeof SavedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/chat': {
-      id: '/chat'
-      path: '/chat'
-      fullPath: '/chat'
-      preLoaderRoute: typeof ChatRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -266,32 +245,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/research/$id': {
-      id: '/research/$id'
-      path: '/research/$id'
-      fullPath: '/research/$id'
-      preLoaderRoute: typeof ResearchIdRouteImport
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/users': {
-      id: '/admin/users'
-      path: '/users'
-      fullPath: '/admin/users'
-      preLoaderRoute: typeof AdminUsersRouteImport
-      parentRoute: typeof AdminRoute
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/admin/research': {
-      id: '/admin/research'
-      path: '/research'
-      fullPath: '/admin/research'
-      preLoaderRoute: typeof AdminResearchRouteImport
+    '/saved': {
+      id: '/saved'
+      path: '/saved'
+      fullPath: '/saved'
+      preLoaderRoute: typeof SavedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/chat': {
+      id: '/admin/chat'
+      path: '/chat'
+      fullPath: '/admin/chat'
+      preLoaderRoute: typeof AdminChatRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/diagnostics': {
@@ -301,26 +287,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDiagnosticsRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/chat': {
-      id: '/admin/chat'
-      path: '/chat'
-      fullPath: '/admin/chat'
-      preLoaderRoute: typeof AdminChatRouteImport
+    '/admin/research': {
+      id: '/admin/research'
+      path: '/research'
+      fullPath: '/admin/research'
+      preLoaderRoute: typeof AdminResearchRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/users/$userId': {
-      id: '/admin/users/$userId'
-      path: '/$userId'
-      fullPath: '/admin/users/$userId'
-      preLoaderRoute: typeof AdminUsersUserIdRouteImport
-      parentRoute: typeof AdminUsersRoute
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
     }
-    '/admin/research/templates': {
-      id: '/admin/research/templates'
-      path: '/templates'
-      fullPath: '/admin/research/templates'
-      preLoaderRoute: typeof AdminResearchTemplatesRouteImport
-      parentRoute: typeof AdminResearchRoute
+    '/research/$id': {
+      id: '/research/$id'
+      path: '/research/$id'
+      fullPath: '/research/$id'
+      preLoaderRoute: typeof ResearchIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/active/$period': {
+      id: '/admin/active/$period'
+      path: '/active/$period'
+      fullPath: '/admin/active/$period'
+      preLoaderRoute: typeof AdminActivePeriodRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/research/new': {
       id: '/admin/research/new'
@@ -329,12 +322,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminResearchNewRouteImport
       parentRoute: typeof AdminResearchRoute
     }
-    '/admin/active/$period': {
-      id: '/admin/active/$period'
-      path: '/active/$period'
-      fullPath: '/admin/active/$period'
-      preLoaderRoute: typeof AdminActivePeriodRouteImport
-      parentRoute: typeof AdminRoute
+    '/admin/research/templates': {
+      id: '/admin/research/templates'
+      path: '/templates'
+      fullPath: '/admin/research/templates'
+      preLoaderRoute: typeof AdminResearchTemplatesRouteImport
+      parentRoute: typeof AdminResearchRoute
+    }
+    '/admin/users/$userId': {
+      id: '/admin/users/$userId'
+      path: '/$userId'
+      fullPath: '/admin/users/$userId'
+      preLoaderRoute: typeof AdminUsersUserIdRouteImport
+      parentRoute: typeof AdminUsersRoute
     }
     '/admin/research/edit/$id': {
       id: '/admin/research/edit/$id'
