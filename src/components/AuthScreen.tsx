@@ -1,14 +1,13 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
-import { CheckCircle2, Loader2, XCircle } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { Logo } from "@/components/Logo";
-import { CountrySelect } from "@/components/CountrySelect";
-import { PasswordInput, isStrongPassword } from "@/components/PasswordInput";
+import { PasswordInput } from "@/components/PasswordInput";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
@@ -19,12 +18,9 @@ const signInSchema = z.object({
 });
 
 const signUpSchema = z.object({
-  firstName: z.string().trim().min(1, "Required").max(60),
-  lastName: z.string().trim().min(1, "Required").max(60),
-  username: z.string().trim().min(3, "Min 3 chars").max(30).regex(/^[a-zA-Z0-9_]+$/, "Letters, numbers, _ only"),
+  fullName: z.string().trim().min(2, "Required").max(120),
   email: z.string().trim().email("Invalid email").max(255),
-  country: z.string().min(1, "Select a country"),
-  password: z.string().refine(isStrongPassword, { message: "Password doesn't meet all requirements" }),
+  password: z.string().min(6, "Min 6 characters"),
   confirmPassword: z.string(),
 }).refine((d) => d.password === d.confirmPassword, { message: "Passwords don't match", path: ["confirmPassword"] });
 
@@ -181,29 +177,12 @@ function SignInForm({ onPendingChange }: { onPendingChange: (v: boolean) => void
 }
 
 function SignUpForm({ onPendingChange: _onPendingChange }: { onPendingChange: (v: boolean) => void }) {
-  const [form, setForm] = useState({
-    firstName: "", lastName: "", username: "", email: "", country: "", password: "", confirmPassword: "",
-  });
+  const [form, setForm] = useState({ fullName: "", email: "", password: "", confirmPassword: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [usernameStatus, setUsernameStatus] = useState<"idle" | "checking" | "available" | "taken" | "invalid">("idle");
 
   const set = (k: keyof typeof form) => (e: ChangeEvent<HTMLInputElement>) =>
     setForm({ ...form, [k]: e.target.value });
-
-  // Debounced username availability check
-  useEffect(() => {
-    const u = form.username.trim();
-    if (!u) { setUsernameStatus("idle"); return; }
-    if (u.length < 3 || !/^[a-zA-Z0-9_]+$/.test(u)) { setUsernameStatus("invalid"); return; }
-    setUsernameStatus("checking");
-    const t = setTimeout(async () => {
-      const { data, error } = await supabase.rpc("is_username_available", { _username: u });
-      if (error) { setUsernameStatus("idle"); return; }
-      setUsernameStatus(data ? "available" : "taken");
-    }, 400);
-    return () => clearTimeout(t);
-  }, [form.username]);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -211,42 +190,25 @@ function SignUpForm({ onPendingChange: _onPendingChange }: { onPendingChange: (v
     const parsed = signUpSchema.safeParse(form);
     if (!parsed.success) {
       const flat = parsed.error.flatten().fieldErrors;
-      const e: Record<string, string> = {};
-      for (const k in flat) e[k] = flat[k as keyof typeof flat]?.[0] ?? "";
-      setErrors(e);
-      return;
-    }
-    if (usernameStatus === "taken") {
-      setErrors({ username: "Username already taken" });
+      const errs: Record<string, string> = {};
+      for (const k in flat) errs[k] = flat[k as keyof typeof flat]?.[0] ?? "";
+      setErrors(errs);
       return;
     }
     setSubmitting(true);
     try {
-      const { data: available, error: checkErr } = await supabase
-        .rpc("is_username_available", { _username: form.username });
-      if (checkErr) {
-        toast.error("Could not validate username. Try again.");
-        setSubmitting(false);
-        return;
-      }
-      if (!available) {
-        setErrors({ username: "Username already taken" });
-        setUsernameStatus("taken");
-        setSubmitting(false);
-        return;
-      }
-
+      const name = form.fullName.trim().replace(/\s+/g, " ");
+      const [firstName, ...rest] = name.split(" ");
       const redirectUrl = typeof window !== "undefined" ? window.location.origin : undefined;
       const { error } = await supabase.auth.signUp({
-        email: form.email,
+        email: form.email.trim(),
         password: form.password,
         options: {
           emailRedirectTo: redirectUrl,
           data: {
-            first_name: form.firstName,
-            last_name: form.lastName,
-            username: form.username,
-            country: form.country,
+            first_name: firstName,
+            last_name: rest.join(" "),
+            full_name: name,
           },
         },
       });
@@ -265,68 +227,27 @@ function SignUpForm({ onPendingChange: _onPendingChange }: { onPendingChange: (v
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
-      <div className="grid grid-cols-2 gap-3">
-        <div className="space-y-2">
-          <Label htmlFor="firstName">First name</Label>
-          <Input id="firstName" value={form.firstName} onChange={set("firstName")} className="glass" />
-          {errors.firstName && <p className="text-xs text-destructive">{errors.firstName}</p>}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="lastName">Last name</Label>
-          <Input id="lastName" value={form.lastName} onChange={set("lastName")} className="glass" />
-          {errors.lastName && <p className="text-xs text-destructive">{errors.lastName}</p>}
-        </div>
-      </div>
       <div className="space-y-2">
-        <Label htmlFor="username">Username</Label>
-        <Input id="username" value={form.username} onChange={set("username")} className="glass" autoComplete="username" />
-        {errors.username && <p className="text-xs text-destructive">{errors.username}</p>}
-        {!errors.username && form.username && (
-          <>
-            {usernameStatus === "checking" && (
-              <p className="text-xs text-muted-foreground flex items-center gap-1">
-                <Loader2 className="h-3 w-3 animate-spin" /> Checking availability…
-              </p>
-            )}
-            {usernameStatus === "invalid" && (
-              <p className="text-xs text-destructive">Min 3 chars, letters, numbers, _ only</p>
-            )}
-            {usernameStatus === "available" && (
-              <p className="text-xs text-green-500 flex items-center gap-1">
-                <CheckCircle2 className="h-3 w-3" /> Username available
-              </p>
-            )}
-            {usernameStatus === "taken" && (
-              <p className="text-xs text-destructive flex items-center gap-1">
-                <XCircle className="h-3 w-3" /> Username not available
-              </p>
-            )}
-          </>
-        )}
+        <Label htmlFor="fullName">Full name</Label>
+        <Input id="fullName" value={form.fullName} onChange={set("fullName")} className="glass" autoComplete="name" />
+        {errors.fullName && <p className="text-xs text-destructive">{errors.fullName}</p>}
       </div>
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" value={form.email} onChange={set("email")} className="glass" />
+        <Input id="email" type="email" value={form.email} onChange={set("email")} className="glass" autoComplete="email" />
         {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="country">Country</Label>
-        <CountrySelect id="country" value={form.country} onChange={(v) => setForm({ ...form, country: v })} />
-        {errors.country && <p className="text-xs text-destructive">{errors.country}</p>}
+        <Label htmlFor="password">Password</Label>
+        <PasswordInput id="password" value={form.password} onChange={set("password")} className="glass" autoComplete="new-password" />
+        {errors.password && <p className="text-xs text-destructive">{errors.password}</p>}
       </div>
-      <div className="grid grid-cols-1 gap-3">
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <PasswordInput id="password" value={form.password} onChange={set("password")} className="glass" showStrength />
-          {errors.password && <p className="text-xs text-destructive">{errors.password}</p>}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm password</Label>
-          <PasswordInput id="confirmPassword" value={form.confirmPassword} onChange={set("confirmPassword")} className="glass" />
-          {errors.confirmPassword && <p className="text-xs text-destructive">{errors.confirmPassword}</p>}
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="confirmPassword">Confirm password</Label>
+        <PasswordInput id="confirmPassword" value={form.confirmPassword} onChange={set("confirmPassword")} className="glass" autoComplete="new-password" />
+        {errors.confirmPassword && <p className="text-xs text-destructive">{errors.confirmPassword}</p>}
       </div>
-      <Button type="submit" disabled={submitting || usernameStatus === "taken" || usernameStatus === "checking"} className="w-full gradient-bg text-primary-foreground hover:opacity-90 glow">
+      <Button type="submit" disabled={submitting} className="w-full gradient-bg text-primary-foreground hover:opacity-90 glow">
         {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         Create account
       </Button>
