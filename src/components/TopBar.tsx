@@ -17,8 +17,16 @@ type Props = {
 
 export function TopBar({ search, onSearchChange, homeTo, profileTo }: Props) {
   const { profile, user, signOut, isAdmin } = useAuth();
+  const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const initials = ((profile?.first_name?.[0] ?? "") + (profile?.last_name?.[0] ?? "")).toUpperCase() || (user?.email?.[0]?.toUpperCase() ?? "U");
+
+  const themeOptions: { value: Theme; label: string; icon: typeof Sun }[] = [
+    { value: "light", label: "Light", icon: Sun },
+    { value: "dark", label: "Dark", icon: Moon },
+    { value: "system", label: "Device default", icon: Monitor },
+  ];
+
 
   return (
     <header className="sticky top-0 z-30 bg-background border-b border-border">
